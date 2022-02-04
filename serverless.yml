@@ -1,41 +1,31 @@
-service: wvtest-puppeteer
+# Mostly copied from https://medium.com/swlh/how-to-create-pdf-in-lambda-using-puppeteer-6355348b8a82
+# Modifications:
+# - NodeJS 12?
+# - No need for ServerlessDomainManager & customDomain.
+# - No need for Webpack.
+# - Maybe don't need serverless-offline?
+
+org: topherhunt
+app: wvtest-puppeteer
+service: wvtest-puppeteer-generate-pdf
 
 provider:
   name: aws
   region: us-east-1
-  environment:
-      STAGE: production
-      BUCKET_NAME: wvtest-prod
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - s3:PutObject
-          - s3:GetObject
-          - s3:DeleteObject
-          - s3:PutObjectAcl
-        Resource:
-          - '*'
+  versionFunctions: false
+  runtime: nodejs12.x
+  stage: production
+  apiGateway:
+    binaryMediaTypes:
+      - "application/pdf"
 
-custom:
-  apigwBinary:
-    types:
-      - '*/*'
+# plugins:
+#   - serverless-offline # for dev compatibility?
 
 functions:
-  app:
-    runtime: nodejs12.x
+  main:
     handler: index.handler
     events:
       - http:
-        path: /generate-pdf
-        method: post
-
-plugins:
-  - serverless-python-requirements
-  - serverless-plugin-include-dependencies
-  - serverless-apigw-binary
-
-package:
-  excludeDevDependencies: false
-  exclude:
-    - node_modules/**
+          path: /generate-pdf
+          method: post

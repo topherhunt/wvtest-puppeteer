@@ -13,6 +13,7 @@
     "chrome-aws-lambda": "^3.1.1",
     "express": "^4.17.1",
     "puppeteer-core": "^3.1.0",
+    "serverless": "^3.1.1",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-http": "^2.7.0",
     "serverless-plugin-include-dependencies": "^4.1.0"
