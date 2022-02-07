@@ -1,17 +1,22 @@
 const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
+app.use(express.json({limit: "50mb"})); // parse request body as JSON
 const chromium = require('chrome-aws-lambda');
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 async function createPdf(body_html, header_html, footer_html, res) {
+  console.log("createPdf called.");
   let browser = null;
+  // /Users/topher/Sites/annick/worldviews/node_modules/puppeteer/.local-chromium/mac-950341/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+  let chromium_path = process.env.CHROMIUM_PATH || await chromium.executablePath;
 
   try {
     browser = await chromium.puppeteer.launch({
       headless: true,
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
+      executablePath: chromium_path,
     });
 
     const page = await browser.newPage();
@@ -27,11 +32,14 @@ async function createPdf(body_html, header_html, footer_html, res) {
       headerTemplate: header_html,
       footerTemplate: footer_html
     });
+
     const base64 = pdfStream.toString('base64');
     await browser.close();
-    res.send({statusCode: 200, pdfData: base64});
+    // See http://expressjs.com/en/4x/api.html#res.json
+    res.status(200).send(base64);
   } catch (err) {
-    res.send({statusCode: 500, userMessage: err});
+    console.log("Error: ", err);
+    res.status(500).send(err);
   }
 }
 
@@ -40,14 +48,21 @@ async function createPdf(body_html, header_html, footer_html, res) {
 // - header_html
 // - footer_html
 app.post('/generate-pdf', async function (req, res) {
-  const body = JSON.parse(req.body.toString());
+  const json = req.body;
+  console.log("The body json:", json);
   // const url = body.get('url');
   await createPdf(
-    body.get("body_html"),
-    body.get("header_html"),
-    body.get("footer_html"),
+    json.body_html,
+    json.header_html,
+    json.footer_html,
     res
   );
+});
+
+// For local development. Ignored on the production lambda.
+port = 4001
+app.listen(port, function(){
+  console.log("Now listening on port "+port);
 });
 
 module.exports.handler = serverless(app);

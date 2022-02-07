@@ -19,11 +19,8 @@ provider:
     binaryMediaTypes:
       - "application/pdf"
 
-# plugins:
-#   - serverless-offline # for dev compatibility?
-
 functions:
-  main:
+  generate-pdf:
     handler: index.handler
     events:
       - http:
