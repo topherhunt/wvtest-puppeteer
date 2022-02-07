@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const puppeteer = require("puppeteer");
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
-const log = (msg) => console.log(""+(new Date()).toISOString()+" "+msg);
+const now = () => (new Date()).toISOString();
+const log = (msg) => console.log(""+now()+" "+msg);
 const port = process.env.PORT || 3000;
 
 // ExpressJS middleware
@@ -40,7 +41,7 @@ async function render_pdf(body_html, header_html, footer_html, res) {
 
 app.get("/ping", async function (req, res) {
   log("■ method="+req.method+" path="+req.path+"");
-  res.json({ok: true, message: "Live long and prosper."});
+  res.json({ok: true, now: now(), message: "Live long and prosper."});
 });
 
 app.post('/generate-pdf', async function (req, res) {
