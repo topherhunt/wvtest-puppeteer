@@ -19,3 +19,5 @@ Previously I tried setting up an AWS Lambda to render PDFs, but the dependencies
 Deployed to Heroku. Relies on the Heroku Puppeteer buildpack in order to run correctly. https://elements.heroku.com/buildpacks/jontewks/puppeteer-heroku-buildpack
 
 The Puppeteer buildpack plus dependencies exceeds Heroku's "soft" slug size limit (350MB) but doesn't exceed the hard limit, so deploys should work fine.
+
+Deploy changes with `git push heroku master`.
