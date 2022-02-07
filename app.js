@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 const puppeteer = require("puppeteer");
+const port = process.env.PORT || 3000;
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 const now = () => (new Date()).toISOString();
 const log = (msg) => console.log(""+now()+" "+msg);
-const port = process.env.PORT || 3000;
 
 // ExpressJS middleware
 app.use(express.json({limit: "50mb"})); // add support for parisng JSON request body
