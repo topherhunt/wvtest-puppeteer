@@ -1,13 +1,7 @@
-# WVTest PDF generator service using AWS Lambda & Puppeteer
+# WVTest PDF generator
 
-Created by following this tutorial: https://medium.com/swlh/how-to-create-pdf-in-lambda-using-puppeteer-6355348b8a82
-
-Deployed using https://serverless.com/.
-
-Useful references:
-
-- https://www.serverless.com/framework/docs/
-- https://www.serverless.com/framework/docs/providers/aws/guide/credentials/
+This Heroku microservice generates PDFs using Puppeteer, for use in the WVTest app.
+Initially this was to be an AWS Lambda, but I found setup & config surprisingly complex.
 
 
 ## Dev setup
@@ -15,13 +9,11 @@ Useful references:
 - Clone the repository
 - `cd` into the project folder
 - `npm install`
-- If `serverless` isn't already in your PATH, you may need to `alias serverless='node_modules/serverless/bin/serverless.js'`.
-- Give your AWS credentials to Serverless - see steps here: https://www.serverless.com/framework/docs/providers/aws/guide/credentials/
-- `serverless deploy` - deploy changes
-- `serverless info` - view details on deployed service & endpoints
+- `node app.js` to start the dev server
+- `curl http://localhost:3000/ping` to test that the server is responsive.
+- To test rendering a PDF, use wvtest's `test_puppeteer.exs` script. Or craft your own curl POST request with the html body, header, and footer specified in the JSON payload. (Be sure to also set Content-Type: application/json.)
 
 
-### Local testing
+## Production
 
-- Start the dev server: `CHROMIUM_PATH=/path/to/your/node_modules/puppeteer/.local-chromium/mac-950341/chrome-mac/Chromium.app/Contents/MacOS/Chromium node index.js`
-- Make a request to the endpoint: `curl -X POST http://localhost:4001/generate-pdf ...` (Be sure to provide the body_html, header_html, and footer_html as escaped strings in JSON payload; and be sure to set header Content-Type: application/json.)
+TODO
