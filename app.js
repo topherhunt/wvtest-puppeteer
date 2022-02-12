@@ -21,7 +21,7 @@ async function render_pdf(body_html, header_html, footer_html, res) {
     // Docs: https://github.com/puppeteer/puppeteer/blob/v13.1.3/docs/api.md#pagepdfoptions
     const pdfStream = await page.pdf({
       // format: "a4",
-      // printBackground: true,
+      printBackground: true,
       margin: {top: "50px", bottom: "50px", left: "10px", right: "10px"},
       displayHeaderFooter: true, // TODO: Do we need this?
       headerTemplate: header_html,
